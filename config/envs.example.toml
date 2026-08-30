@@ -1,0 +1,22 @@
+# BugAnalyzer 环境清单（业务组适配点①）
+# 使用：复制本文件为 envs.toml 后填写你的环境。
+# Phase 1 硬边界：Server 会拒绝连接 tier = "prod" 的环境（设计 §9）。
+
+[env.test-order]
+tier = "test"                 # test / staging / prod（枚举校验）
+ssh = "user@10.20.x.x"        # ~/.ssh/config 别名 或 user@host[:port]
+mode = "docker"               # vm / docker / k8s
+services = ["order-service"]
+timeout = 15                  # 命令超时（秒），默认 30
+timezone = "Asia/Shanghai"    # since 参数与日志时间基准
+log_path = "/var/log/order-service/app.log"   # 服务日志路径（可用 * ? 通配符）
+
+[env.test-order.log_paths]
+# 按服务覆盖 log_path：
+# payment-service = "/var/log/payment-service/*.log"
+
+[env.prod-order]
+tier = "prod"                 # Phase 1 会被 Server 拒绝连接
+ssh = "user@10.10.x.x"
+mode = "vm"
+services = ["order-service", "payment-service"]

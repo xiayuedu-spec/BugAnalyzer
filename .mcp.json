@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "buganalyzer": {
+      "command": "uv",
+      "args": ["run", "--directory", "mcp", "buganalyzer-mcp"]
+    }
+  }
+}

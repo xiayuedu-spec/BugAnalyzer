@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "deny": [
+      "mcp__buganalyzer__buganalyzer_ssh_run_raw"
+    ]
+  }
+}

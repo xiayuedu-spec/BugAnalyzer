@@ -1,0 +1,2 @@
+# 案例目录。由 kb-import 导入 / analyze-issue 沉淀生成。
+# 命名约定：imported-<ticket_id>-<slug>.md（导入）或 <service>-<issue>-<slug>.md（沉淀）

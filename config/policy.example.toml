@@ -1,0 +1,24 @@
+# BugAnalyzer 权限策略（业务组适配点②）
+# 使用：复制本文件为 policy.toml 后按自己安全要求调整。
+# 策略是 allowlist（默认拒绝）：只放行显式列出的能力，不维护 deny 黑名单。
+
+[tier.test]
+allow_auto = ["list_*", "fetch_logs", "ssh_run:readonly:*", "arthas:readonly:*"]
+allow_confirm = ["ssh_run:*", "arthas:*", "ssh_run_raw:*"]
+
+[tier.staging]
+allow_auto = ["list_*", "fetch_logs", "ssh_run:readonly:*"]
+allow_confirm = ["ssh_run:confirm:*"]
+
+[tier.prod]
+allow_auto = ["list_*"]
+allow_confirm = ["fetch_logs", "ssh_run:readonly:*", "arthas:readonly:*"]
+# Phase 1：prod 环境连接会被 Server 拒绝（envs.toml 中 tier=prod 的条目）
+
+# ssh_run 命令白名单：command（含参数前缀）必须命中此表；
+# 参数独立传参 + shell 转义（ssh_client），不做字符串拼接。
+# readonly  = 只读命令，低风险环境自动放行
+# confirm   = 有影响操作，需人工确认（Claude Code 权限层把关）
+[ssh_run.whitelist]
+readonly = ["tail", "grep", "jps", "ps", "cat", "free", "df", "uptime", "ss", "docker"]
+confirm = ["docker exec", "kubectl exec"]
